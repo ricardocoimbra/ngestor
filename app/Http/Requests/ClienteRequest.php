@@ -24,15 +24,24 @@ class ClienteRequest extends FormRequest
     public function rules()
     {
         return [
+            'nome' => 'required',
             'email' => 'required|email',
+            'logradouro' => 'required',
+            'numero' => 'required',
+            'complemento' => 'required',
+            'bairro' => 'required',
+            'cidade' => 'required',
+            'estado' => 'required',
+
         ];
     }
 
     public function messages()
     {
         return [
-            'email.required' => 'O email é obrigatório',
-
+            'required' => 'O campo :attribute é obrigatório',
+            'email' => 'O campo :attribute deve corresponder a um :attribute válido',
+            'unique' => 'O campo :attribute não pode ser repetido',
         ];
     }
 }

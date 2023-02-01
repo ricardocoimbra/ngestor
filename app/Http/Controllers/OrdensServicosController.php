@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ClienteRequest;
-use Illuminate\Http\Request;
 use App\Cliente;
+use App\OrdemServico;
+use App\Servico;
+use Illuminate\Http\Request;
 
-class ClientesController extends Controller
+class OrdensServicosController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -20,9 +22,12 @@ class ClientesController extends Controller
      */
     public function index(Request $request)
     {
-        $clientes = Cliente::all();
+        $ordensServicos = OrdemServico::all();
         $mensagemSucesso = $request->session()->get('mensagem.sucesso');
-        return view('clientes.index', compact('clientes', 'mensagemSucesso'));
+        return view('os.index')
+            ->with('ordensServicos', $ordensServicos)
+            ->with('mensagemSucesso', $mensagemSucesso)
+            ;
     }
 
     /**
@@ -32,7 +37,11 @@ class ClientesController extends Controller
      */
     public function create()
     {
-        return view('clientes.create');
+        $clientes = Cliente::all();
+        $servicos = Servico::all();
+        return view('os.create')
+            ->with('clientes', $clientes)
+            ->with('servicos', $servicos);
     }
 
     /**
@@ -41,58 +50,67 @@ class ClientesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
-    public function store(ClienteRequest $request)
+    public function store(Request $request)
     {
-        $cliente = Cliente::create($request->all());
-        return redirect('clientes')->with('mensagem.sucesso', "Cliente cadastrado com sucesso");
+        $ordensServicos = OrdemServico::create($request->all());
+        return redirect('os')
+            ->with('ordensServicos', $ordensServicos)
+            ->with('mensagem.sucesso', "Ordem de Serviço cadastrada com sucesso");
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Cliente $cliente
+     * @param  \App\OrdemServico  $ordemServico
      * @return \Illuminate\Http\Response
      */
-    public function show(Cliente $cliente)
+    public function show(OrdemServico $ordemServico)
     {
-        dd($cliente);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Cliente  $cliente
+     * @param  \App\OrdemServico  $ordemServico
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function edit(Cliente $cliente)
+    public function edit(OrdemServico $o)
     {
-        return view('clientes.edit')->with('cliente', $cliente);
+        $clientes = Cliente::all();
+        $servicos = Servico::all();
+        return view('os.edit')
+            ->with('o', $o)
+            ->with('clientes', $clientes)
+            ->with('servicos', $servicos)
+            ;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Cliente $cliente
+     * @param  \App\OrdemServico  $ordemServico
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
-    public function update(Cliente $cliente, Request $request)
+    public function update(Request $request, OrdemServico $o)
     {
-        $cliente->fill($request->all());
-        $cliente->save();
+        $o->fill($request->all());
+        $o->save();
 
-        return redirect('clientes')->with('mensagem.sucesso', "Cliente atualizado com sucesso");;
+        return redirect('os')
+            ->with('mensagem.sucesso', "Ordem de Serviço atualizada com sucesso");
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\OrdemServico  $ordemServico
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
-    public function destroy(Cliente $cliente)
+    public function destroy(OrdemServico $o)
     {
-        $cliente->delete();
-        return redirect('clientes')->with('mensagem.sucesso', "Cliente removido com sucesso");
+        $o->delete();
+        return redirect('os')->with('mensagem.sucesso', "Ordem de Serviço removido com sucesso");
     }
 }

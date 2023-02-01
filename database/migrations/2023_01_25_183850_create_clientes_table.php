@@ -15,10 +15,8 @@ class CreateClientesTable extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            // Nome, e-mail, rua, número, complemento, bairro, cidade, estado
             $table->string('nome', 100);
-            $table->string('email');
-            $table->string('cep', 8);
+            $table->string('email')->unique();
             $table->string('logradouro', 100);
             $table->string('numero', 5);
             $table->string('complemento', 150);

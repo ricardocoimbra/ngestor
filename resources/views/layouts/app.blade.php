@@ -34,6 +34,12 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
 
+                        @auth
+                            <a class="nav-link" href="/clientes">Clientes</a>
+                            <a class="nav-link" href="/servicos">Serviços</a>
+                            <a class="nav-link" href="/os">Ordens de Serviços</a>
+                        @endauth
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
